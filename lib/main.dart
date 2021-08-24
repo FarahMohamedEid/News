@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
+import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +11,7 @@ import 'package:news/cubit/states.dart';
 import 'package:news/layouts/News_layout.dart';
 import 'package:news/network/local/cache_helper.dart';
 import 'package:news/network/remote/dio_helper.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 import 'bloc_observer.dart';
 
@@ -18,6 +22,15 @@ void main() async{
   //runApp(MyApp());
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  if(Platform.isWindows){
+    await DesktopWindow.setMinWindowSize(
+        Size(
+            400,
+            600
+        )
+    );
+  }
 
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
@@ -44,7 +57,6 @@ class MyApp extends StatelessWidget {
         builder:  (context,state){
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: NewsHomeScreen(),
             theme: ThemeData(
               primarySwatch: Colors.deepOrange,
               scaffoldBackgroundColor: Colors.white,
@@ -124,6 +136,8 @@ class MyApp extends StatelessWidget {
               ),
             ),
             themeMode: NewsCubit.get(context).darkMode ? ThemeMode.dark : ThemeMode.light,
+
+            home: NewsHomeScreen(),
           );
         },
       ),

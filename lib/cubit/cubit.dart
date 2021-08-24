@@ -45,6 +45,7 @@ class NewsCubit extends Cubit<NewsStates> {
 
 
   List<dynamic> business = [];
+  int businessSelected = 0 ;
 
   void getBusiness() {
     emit(NewsGetBusinessLoadingState());
@@ -62,6 +63,11 @@ class NewsCubit extends Cubit<NewsStates> {
       print('Eroooooor on get data =>' + error.toString());
       emit(NewsGetBusinessErrorState(error.toString()));
     });
+  }
+
+  void changeBusinessSelected(index){
+    businessSelected = index;
+    emit(NewsGetSelectedItemChangeState());
   }
 
 
