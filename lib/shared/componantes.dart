@@ -5,119 +5,84 @@ import 'package:news/cubit/cubit.dart';
 import 'package:news/cubit/states.dart';
 import 'package:news/modules/web_view.dart';
 
-Widget ArticleItem (article,context)=> InkWell(
-  onTap: (){
-    navigateTo(context, WebViewScreen(article['url']),);
-  },
-  child:   Padding(
-  
-    padding: const EdgeInsets.all(8.0),
-  
-    child: Row(
-  
-      children: [
-  
-        Container(
-  
-          height: 120,
-  
-          width: 120,
-  
-          decoration: BoxDecoration(
-  
-            borderRadius: BorderRadius.circular(10.0),
-  
-            image: DecorationImage(
-  
-              image:NetworkImage('${article['urlToImage']}'),
-  
-              fit: BoxFit.cover,
-  
-            ),
-  
-          ) ,
-  
-        ),
-  
-        SizedBox(width: 10,),
-  
-        Expanded(
-  
-          child: Container(
-  
-            height: 120,
-  
-            child: Column(
-  
-              crossAxisAlignment: CrossAxisAlignment.start,
-  
-              mainAxisAlignment: MainAxisAlignment.start,
-  
-              children: [
-  
-                Expanded(
-  
-                  child: Text(
-  
-                    '${article['title']}',
-  
-                    maxLines: 3,
-  
-                    overflow: TextOverflow.ellipsis,
-  
-                    style:Theme.of(context).textTheme.bodyText1,
-  
+Widget ArticleItem(article, context, index) => Container(
+      color: NewsCubit.get(context).businessSelected == index
+          ? Colors.grey[200]
+          : null,
+      child: InkWell(
+        onTap: () {
+          NewsCubit.get(context).changeBusinessSelected(index);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Container(
+                height: 120,
+                width: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    image: NetworkImage('${article['urlToImage']}'),
+                    fit: BoxFit.cover,
                   ),
-  
                 ),
-  
-                Text(
-  
-                  '${article['publishedAt']}',
-  
-                  style: TextStyle(
-  
-                    fontSize: 15,
-  
-                    color: Colors.black45,
-  
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Container(
+                  height: 120,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '${article['title']}',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      ),
+                      Text(
+                        '${article['publishedAt']}',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ],
                   ),
-  
                 ),
-  
-              ],
-  
-            ),
-  
+              ),
+            ],
           ),
-  
         ),
-  
-      ],
-  
-    ),
-  
-  ),
-);
+      ),
+    );
 
-Widget MySeparatorBuilder ()=> Container(
-  height: 2,
-  color: Colors.grey,
-);
+Widget MySeparatorBuilder() => Container(
+      height: 2,
+      color: Colors.grey,
+    );
 
-
-Widget ArticleBulder (list,context,{isSearch=false})=> ConditionalBuilder(
-      condition: list.length>0,
+Widget ArticleBuilder(list, context, {isSearch = false}) => ConditionalBuilder(
+      condition: list.length > 0,
       builder: (context) => ListView.separated(
         physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index) => ArticleItem(list[index],context),
+        itemBuilder: (context, index) =>
+            ArticleItem(list[index], context, index),
         separatorBuilder: (context, index) => MySeparatorBuilder(),
         itemCount: list.length,
       ),
-      fallback: (context) => isSearch? Container() : Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.black87,
-          )),
+      fallback: (context) => isSearch
+          ? Container()
+          : Center(
+              child: CircularProgressIndicator(
+              backgroundColor: Colors.black87,
+            )),
     );
 
 Widget defaultFormField({
@@ -148,22 +113,21 @@ Widget defaultFormField({
         prefixIcon: Icon(
           prefix,
         ),
-        suffixIcon: suffix != null ? IconButton(
-          onPressed: suffixPressed,
-          icon: Icon(
-            suffix,
-          ),
-        )
+        suffixIcon: suffix != null
+            ? IconButton(
+                onPressed: suffixPressed,
+                icon: Icon(
+                  suffix,
+                ),
+              )
             : null,
         border: OutlineInputBorder(),
       ),
     );
 
-
-
-void navigateTo (context,widget)=>Navigator.push(
-    context,
-    MaterialPageRoute(
-        builder:(context) => widget,
-    ),
-);
+void navigateTo(context, widget) => Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => widget,
+      ),
+    );

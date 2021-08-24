@@ -36,3 +36,5 @@ class NewsGetSearchErrorState extends NewsStates{
   NewsGetSearchErrorState(this.error);
 }
 
+
+class NewsGetSelectedItemChangeState extends NewsStates{}

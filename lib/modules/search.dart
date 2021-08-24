@@ -35,7 +35,7 @@ class SearchScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child:ArticleBulder(list, context,isSearch: true),
+                child:ArticleBuilder(list, context,isSearch: true),
               ),
             ],
           ) ,
