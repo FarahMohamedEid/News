@@ -1,5 +1,5 @@
-import 'dart:io';
 
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +9,13 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:news/cubit/cubit.dart';
 import 'package:news/cubit/states.dart';
 import 'package:news/layouts/News_layout.dart';
+import 'package:news/layouts/responsive/mobile_login.dart';
 import 'package:news/network/local/cache_helper.dart';
 import 'package:news/network/remote/dio_helper.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import 'bloc_observer.dart';
+import 'layouts/responsive/windows_login.dart';
 
 void main() async{
   //  علشان يتأكد ان كل الحاجات الي عليها
@@ -137,7 +139,23 @@ class MyApp extends StatelessWidget {
             ),
             themeMode: NewsCubit.get(context).darkMode ? ThemeMode.dark : ThemeMode.light,
 
-            home: NewsHomeScreen(),
+            // home: NewsHomeScreen(),
+            home: LayoutBuilder(
+              builder: (context, constraints) {
+                // to print the size of screen
+                print(constraints.minWidth.toInt());
+
+                if(MediaQuery.of(context).size.width<=560)
+                  return MediaQuery(
+                      child: MobileLogin(),
+                      data: MediaQuery.of(context).copyWith(
+                       textScaleFactor: 0.6
+                      ),
+                  );
+
+                return WindowsLogin();
+              },
+            ),
           );
         },
       ),
